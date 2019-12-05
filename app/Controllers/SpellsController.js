@@ -32,7 +32,7 @@ export default class SpellsController {
 
   }
 
-  async keep(){
+  async keep( ){
     try {
       await SpellsService.keepAsync()
     } catch (error) {
