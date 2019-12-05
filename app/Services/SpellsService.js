@@ -1,4 +1,4 @@
-import Store from "../store.js";
+import Spells from "../Models/Spells.js"
 import store from "../store.js";
 
 let _sandBox = axios.create({
@@ -11,9 +11,26 @@ let _spellApi = axios.create({
 })
 
 class SpellsService {
+
+    async keepAsync(){
+        let currentSpell = store.State.activeSpells;
+        let res = await _sandBox.post("", currentSpell)
+        debugger
+        this.getMySpellsAsync()
+    }
+    async getMySpellsAsync(){
+        let res = await _sandBox.get();
+        store.commit("yourSpells", res.data.data.map(sData => new Spells(sData)))
+    }
+
     async getMasterSpellsAsync(){
         let res = await _spellApi.get('')
         store.commit("spells", res.data)
+    }
+    async pickSpellAsync(id){
+        let res = await _spellApi.get("/" + id)
+        let pickedSpell = new Spells(res.data)
+        store.commit("activeSpells", pickedSpell)
     }
 }
 
